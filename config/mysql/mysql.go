@@ -3,6 +3,7 @@ package mysql
 import (
 	"fmt"
 	"log"
+	"web-desa/model"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -22,7 +23,7 @@ func InitGorm(username, password, host, database string, port int) *gorm.DB {
 	if err != nil {
 		log.Fatal("Cannot connect to database")
 	}
-	// db.AutoMigrate(&model.User{}, &model.Matkul{}, &model.Kelas{}, &model.JadwalKelas{}, &model.Plan{})
+	db.AutoMigrate(model.Umkm{})
 
 	return db
 }

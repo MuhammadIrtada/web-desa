@@ -4,6 +4,9 @@ import (
 	"log"
 	"net/http"
 	"web-desa/config"
+	"web-desa/handler"
+	"web-desa/repository"
+	"web-desa/service"
 
 	"github.com/gin-gonic/gin"
 )
@@ -49,12 +52,11 @@ func(s *server) Run() {
 	// 	helper.ResponseSuccessJson(ctx, "seeder success", "")
 	// })
 
-	// matkulRepo := repository.NewMatkulRepository(s.cfg)
-	// matkulService := service.NewMatkulService(matkulRepo)
-	// matkulHandler := handler.NewMatkulHandler(matkulService)
-	// matkulGroup := s.httpServer.Group("/matkul")
-	// matkulGroup.Use(middleware.ValidateToken())
-	// matkulHandler.Mount(matkulGroup)
+	umkmRepo := repository.NewUmkmRepository(s.cfg)
+	umkmService := service.NewumkmService(umkmRepo)
+	umkmHandler := handler.NewUmkmHandler(umkmService)
+	umkmGroup := s.httpServer.Group("/umkm")
+	umkmHandler.Mount(umkmGroup)
 
 	if err := s.httpServer.Run(); err != nil {
 		log.Fatal(err)
