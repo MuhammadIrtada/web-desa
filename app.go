@@ -58,6 +58,12 @@ func(s *server) Run() {
 	umkmGroup := s.httpServer.Group("/umkm")
 	umkmHandler.Mount(umkmGroup)
 
+	wisataRepo := repository.NewWisataRepository(s.cfg)
+	wisataService := service.NewWisataService(wisataRepo)
+	wisataHandler := handler.NewWisataHandler(wisataService)
+	wisataGroup := s.httpServer.Group("/wisata")
+	wisataHandler.Mount(wisataGroup)
+
 	if err := s.httpServer.Run(); err != nil {
 		log.Fatal(err)
 	}
