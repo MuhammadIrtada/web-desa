@@ -59,6 +59,12 @@ func(s *server) Run() {
 	desaGroup := s.httpServer.Group("/desa")
 	desaHandler.Mount(desaGroup)
 
+	infoKegiatanRepo := repository.NewInfoKegiatanRepository(s.cfg)
+	infoKegiatanService := service.NewInfoKegiatanService(infoKegiatanRepo)
+	infoKegiatanHandler := handler.NewInfoKegiatanHandler(infoKegiatanService)
+	infoKegiatanGroup := s.httpServer.Group("/info-kegiatan")
+	infoKegiatanHandler.Mount(infoKegiatanGroup)
+
 	umkmRepo := repository.NewUmkmRepository(s.cfg)
 	umkmService := service.NewumkmService(umkmRepo)
 	umkmHandler := handler.NewUmkmHandler(umkmService)

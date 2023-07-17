@@ -23,7 +23,7 @@ func InitGorm(username, password, host, database string, port int) *gorm.DB {
 	if err != nil {
 		log.Fatal("Cannot connect to database")
 	}
-	db.AutoMigrate(model.Umkm{}, model.Wisata{}, model.Desa{})
+	db.AutoMigrate(model.Umkm{}, model.Wisata{}, model.Desa{}, model.InfoKegiatan{})
 
 	return db
 }
