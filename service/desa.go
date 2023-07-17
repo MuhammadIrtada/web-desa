@@ -53,7 +53,7 @@ func (s *desaService) EditDesa(id uint, req *request.DesaRequest) (*model.Desa, 
 	return newDesa, nil
 }
 
-func (s *desaService) DestroyDesa(id uint) error {
+func (s *desaService) DestroyDesa() error {
 	desa, _ := s.desaRepository.Fetch()
 
 	_, err := s.desaRepository.Delete(desa)

@@ -71,7 +71,7 @@ func (h *desaHandler) EditDesaHandler(c *gin.Context) {
 }
 
 func (h *desaHandler) DeleteDesaHandler(c *gin.Context) {
-	err := h.desaService.DestroyDesa(1)
+	err := h.desaService.DestroyDesa()
 	if err != nil {
 		helper.ResponseErrorJson(c, http.StatusUnprocessableEntity, err)
 		return

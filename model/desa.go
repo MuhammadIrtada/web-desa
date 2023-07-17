@@ -25,7 +25,7 @@ type (
 		StoreDesa(req *request.DesaRequest) (*Desa, error)
 		FetchDesa() (*Desa, error)
 		EditDesa(id uint, req *request.DesaRequest) (*Desa, error)
-		DestroyDesa(id uint) error
+		DestroyDesa() error
 	}
 
 	DesaHandler interface {
