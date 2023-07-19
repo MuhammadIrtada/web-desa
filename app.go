@@ -53,6 +53,12 @@ func(s *server) Run() {
 	// 	helper.ResponseSuccessJson(ctx, "seeder success", "")
 	// })
 
+	userRepo := repository.NewUserRepository(s.cfg)
+	userService := service.NewUserService(userRepo)
+	userHandler := handler.NewUserHandler(userService)
+	userGroup := s.httpServer.Group("/user")
+	userHandler.Mount(userGroup)
+
 	desaRepo := repository.NewDesaRepository(s.cfg)
 	desaService := service.NewDesaService(desaRepo)
 	desaHandler := handler.NewDesaHandler(desaService)

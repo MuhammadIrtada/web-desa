@@ -1,6 +1,7 @@
 package model
 
 import (
+	"time"
 	"web-desa/request"
 
 	"github.com/gin-gonic/gin"
@@ -8,10 +9,12 @@ import (
 
 type (
 	Desa struct {
-		ID          uint   `gorm:"primaryKey"`
-		TentangDesa string `json:"tentang_desa"`
-		Visi        string `json:"visi"`
-		Misi        string `json:"misi"`
+		ID          uint   		`gorm:"primaryKey"`
+		TentangDesa string 		`json:"tentang_desa"`
+		Visi        string 		`json:"visi"`
+		Misi        string 		`json:"misi"`
+		CreatedAt 	time.Time 	`json:"-"`
+		UpdatedAt 	time.Time 	`json:"-"`
 	}
 
 	DesaRepository interface {
