@@ -8,6 +8,7 @@ import (
 	"web-desa/repository"
 	"web-desa/service"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -25,12 +26,12 @@ type (
 func InitServer(cfg config.Config) Server {
 	r := gin.Default()
 	
-	// r.Use(cors.New(cors.Config{
-	// 	AllowAllOrigins:  true,
-	// 	AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE"},
-	// 	AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type", "Authorization"},
-	// 	AllowCredentials: true,
-	// }))
+	r.Use(cors.New(cors.Config{
+		AllowAllOrigins:  true,
+		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE"},
+		AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type", "Authorization"},
+		AllowCredentials: true,
+	}))
 
 	return &server{
 		httpServer: r,
@@ -51,6 +52,24 @@ func(s *server) Run() {
 		
 	// 	helper.ResponseSuccessJson(ctx, "seeder success", "")
 	// })
+
+	userRepo := repository.NewUserRepository(s.cfg)
+	userService := service.NewUserService(userRepo)
+	userHandler := handler.NewUserHandler(userService)
+	userGroup := s.httpServer.Group("/user")
+	userHandler.Mount(userGroup)
+
+	desaRepo := repository.NewDesaRepository(s.cfg)
+	desaService := service.NewDesaService(desaRepo)
+	desaHandler := handler.NewDesaHandler(desaService)
+	desaGroup := s.httpServer.Group("/desa")
+	desaHandler.Mount(desaGroup)
+
+	infoKegiatanRepo := repository.NewInfoKegiatanRepository(s.cfg)
+	infoKegiatanService := service.NewInfoKegiatanService(infoKegiatanRepo)
+	infoKegiatanHandler := handler.NewInfoKegiatanHandler(infoKegiatanService)
+	infoKegiatanGroup := s.httpServer.Group("/info-kegiatan")
+	infoKegiatanHandler.Mount(infoKegiatanGroup)
 
 	umkmRepo := repository.NewUmkmRepository(s.cfg)
 	umkmService := service.NewumkmService(umkmRepo)
