@@ -2,6 +2,7 @@ package handler
 
 import (
 	"net/http"
+	"web-desa/config/middleware"
 	"web-desa/helper"
 	"web-desa/model"
 	"web-desa/request"
@@ -18,10 +19,10 @@ func NewDesaHandler(desaService model.DesaService) model.DesaHandler {
 }
 
 func (h *desaHandler) Mount(group *gin.RouterGroup) {
-	group.POST("", h.StoreDesaHandler)
+	group.POST("", middleware.ValidateToken(), h.StoreDesaHandler)
 	group.GET("", h.FetchDesaHandler)
-	group.PATCH("", h.EditDesaHandler)
-	group.DELETE("", h.DeleteDesaHandler)
+	group.PATCH("", middleware.ValidateToken(), h.EditDesaHandler)
+	group.DELETE("", middleware.ValidateToken(), h.DeleteDesaHandler)
 }
 
 func (h *desaHandler) StoreDesaHandler(c *gin.Context) {

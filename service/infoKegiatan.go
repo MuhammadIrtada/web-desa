@@ -55,7 +55,10 @@ func (s *infoKegiatanService) GetByID(id uint) (*model.InfoKegiatan, error) {
 }
 
 func (s *infoKegiatanService) DestroyInfoKegiatan(id uint) error {
-	infoKegiatan, _ := s.infoKegiatanRepository.FindByID(id)
+	infoKegiatan, errFind := s.infoKegiatanRepository.FindByID(id)
+	if errFind != nil {
+		return errFind
+	}
 
 	_, err := s.infoKegiatanRepository.Delete(infoKegiatan)
 	if err != nil {

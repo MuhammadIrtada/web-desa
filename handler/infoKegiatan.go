@@ -3,6 +3,7 @@ package handler
 import (
 	"net/http"
 	"strconv"
+	"web-desa/config/middleware"
 	"web-desa/helper"
 	"web-desa/model"
 	"web-desa/request"
@@ -19,10 +20,10 @@ func NewInfoKegiatanHandler(infoKegiatanService model.InfoKegiatanService) model
 }
 
 func (h *infoKegiatanHandler) Mount(group *gin.RouterGroup) {
-	group.POST("", h.StoreInfoKegiatanHandler)
-	group.PATCH("/:id", h.EditInfoKegiatanHandler) 
+	group.POST("", middleware.ValidateToken(), h.StoreInfoKegiatanHandler)
+	group.PATCH("/:id", middleware.ValidateToken(), h.EditInfoKegiatanHandler) 
 	group.GET("/:id", h.DetailInfoKegiatanHandler) 
-	group.DELETE("/:id", h.DeleteInfoKegiatanHandler) 
+	group.DELETE("/:id", middleware.ValidateToken(), h.DeleteInfoKegiatanHandler) 
 	group.GET("", h.FetchInfoKegiatanHandler) 
 }
 
