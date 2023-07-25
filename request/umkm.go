@@ -2,10 +2,10 @@ package request
 
 type (
 	UmkmRequest struct {
-		Nama       string `json:"nama" binding:"required"`
-		Alamat     string `json:"alamat" binding:"required"`
-		Kontak     string `json:"kontak" binding:"required"`
-		Gambar     string `json:"gambar" binding:"required"`
-		Deskripsi  string `json:"deskripsi" binding:"required"`
+		Nama       string `form:"nama" binding:"required"`
+		Alamat     string `form:"alamat" binding:"required"`
+		Kontak     string `form:"kontak" binding:"required"`
+		Gambar     string 
+		Deskripsi  string `form:"deskripsi" binding:"required"`
 	}
 )

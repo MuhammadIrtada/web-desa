@@ -29,7 +29,7 @@ func (u *umkmHandler) Mount(group *gin.RouterGroup) {
 func (u *umkmHandler) StoreUmkmHandler(c *gin.Context) {
 	var req request.UmkmRequest
 
-	err := c.ShouldBindJSON(&req)
+	err := c.ShouldBind(&req)
 	if err != nil {
 		helper.ResponseValidationErrorJson(c, "Error binding struct", err.Error())
 		return 
@@ -40,6 +40,14 @@ func (u *umkmHandler) StoreUmkmHandler(c *gin.Context) {
 		helper.ResponseValidatorErrorJson(c, err)
 		return
 	}
+
+	link, err := u.umkmService.UploadImage(c)
+	if err != nil {
+		helper.ResponseErrorJson(c, http.StatusInternalServerError, err)
+		return
+	}
+	req.Gambar = link
+
 	umkm, err := u.umkmService.StoreUmkm(&req)
 	if err !=nil {
 		helper.ResponseErrorJson(c, http.StatusBadRequest, err)
@@ -101,6 +109,12 @@ func (u *umkmHandler) EditUmkmHandler(c *gin.Context) {
 func (h *umkmHandler) DeleteUmkmHandler(c *gin.Context) {	
 	id := c.Param("id")
 	idUint, _ := strconv.ParseUint(id, 10, 32)
+
+	errDelImage := h.umkmService.DeleteImage(c, uint(idUint))
+	if errDelImage != nil {
+		helper.ResponseErrorJson(c, http.StatusInternalServerError, errDelImage)
+		return
+	}
 
 	err := h.umkmService.DestroyUmkm(uint(idUint))
 	if err != nil {

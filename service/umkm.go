@@ -3,6 +3,9 @@ package service
 import (
 	"web-desa/model"
 	"web-desa/request"
+
+	supabasestorageuploader "github.com/adityarizkyramadhan/supabase-storage-uploader"
+	"github.com/gin-gonic/gin"
 )
 
 type umkmService struct {
@@ -79,4 +82,37 @@ func (u *umkmService) StoreUmkm(req *request.UmkmRequest) (*model.Umkm, error) {
 	}
 
 	return newUmkm, nil
+}
+
+var supClientUmkm = supabasestorageuploader.NewSupabaseClient(
+	"https://qbekdjxviuehumdvbstm.supabase.co",
+	"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFiZWtkanh2aXVlaHVtZHZic3RtIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTAyMDI4MTYsImV4cCI6MjAwNTc3ODgxNn0.BNktDUzBhCu8bfALLtQ7LxcZnrWVeJwXjh8S3I_iP0E",
+	"api-service-desa",
+	"umkm",
+)
+
+func (h *umkmService) UploadImage(c *gin.Context) (string, error) {
+	file, err := c.FormFile("gambar")
+	if err != nil {
+		return "", err
+	}
+	link, err := supClientUmkm.Upload(file)
+	if err != nil {
+		return "", err
+	}
+	return link, nil
+}
+
+func (h *umkmService) DeleteImage(c *gin.Context, id uint) error {
+	umkm, errFind := h.GetByID(id)
+	if errFind != nil {
+		return errFind
+	}
+
+	_, err := supClientUmkm.DeleteFile(umkm.Gambar)
+	if err != nil {
+		return err
+	} 
+
+	return nil
 }

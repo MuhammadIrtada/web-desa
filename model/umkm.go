@@ -33,6 +33,8 @@ type (
 		GetByID(id uint) (*Umkm, error)
 		DestroyUmkm(id uint) error
 		FetchUmkm() ([]*Umkm, error)
+		UploadImage(c *gin.Context) (string, error)
+		DeleteImage(c *gin.Context, id uint) error
 	}
 
 	UmkmHandler interface {
