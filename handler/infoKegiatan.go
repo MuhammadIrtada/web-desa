@@ -30,11 +30,18 @@ func (h *infoKegiatanHandler) Mount(group *gin.RouterGroup) {
 func (h *infoKegiatanHandler) StoreInfoKegiatanHandler(c *gin.Context) {
 	var req request.InfoKegiatanRequest
 
-	err := c.ShouldBindJSON(&req)
+	err := c.ShouldBind(&req)
 	if err != nil {
 		helper.ResponseValidationErrorJson(c, "Error binding struct", err.Error())
 		return
 	}
+	
+	link, err := h.infoKegiatanService.UploadImage(c)
+	if err != nil {
+		helper.ResponseErrorJson(c, http.StatusInternalServerError, err)
+		return
+	}
+	req.Gambar = link
 
 	infoKegiatan, err := h.infoKegiatanService.StoreInfoKegiatan(&req)
 	if err != nil {
@@ -48,7 +55,7 @@ func (h *infoKegiatanHandler) StoreInfoKegiatanHandler(c *gin.Context) {
 func (h *infoKegiatanHandler) EditInfoKegiatanHandler(c *gin.Context) {
 	var req request.InfoKegiatanRequest
 
-	err := c.ShouldBindJSON(&req)
+	err := c.ShouldBind(&req)
 	if err != nil {
 		helper.ResponseValidationErrorJson(c, "Error binding struct", err.Error())
 		return 
@@ -57,6 +64,18 @@ func (h *infoKegiatanHandler) EditInfoKegiatanHandler(c *gin.Context) {
 	id := c.Param("id")
 	idUint, _ := strconv.ParseUint(id, 10, 32)
 
+	link, err := h.infoKegiatanService.UploadImage(c)
+	if err != nil {
+		infoKegiatan, err := h.infoKegiatanService.GetByID(uint(idUint))
+		if err != nil {
+			helper.ResponseValidationErrorJson(c, "Error binding struct", err.Error())
+			return 
+		}
+		req.Gambar = infoKegiatan.Gambar
+	} else {
+		req.Gambar = link
+	}
+	
 	infoKegiatan, err := h.infoKegiatanService.EditInfoKegiatan(uint(idUint), &req)
 	if err != nil {
 		helper.ResponseErrorJson(c, http.StatusUnprocessableEntity, err)
@@ -92,6 +111,12 @@ func (h *infoKegiatanHandler) DetailInfoKegiatanHandler(c *gin.Context) {
 func (h *infoKegiatanHandler) DeleteInfoKegiatanHandler(c *gin.Context) {
 	id := c.Param("id")
 	idUint, _ := strconv.ParseUint(id, 10, 32)
+
+	errDelImage := h.infoKegiatanService.DeleteImage(c, uint(idUint))
+	if errDelImage != nil {
+		helper.ResponseErrorJson(c, http.StatusInternalServerError, errDelImage)
+		return
+	}
 
 	err := h.infoKegiatanService.DestroyInfoKegiatan(uint(idUint))
 	if err != nil {

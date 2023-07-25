@@ -9,13 +9,13 @@ import (
 
 type (
 	InfoKegiatan struct {
-		ID        uint   	`gorm:"primaryKey"`
-		Judul     string 	`json:"tentang_desa" gorm:"type:varchar(100)"`
-		Gambar    string 	`json:"gambar" gorm:"type:varchar(100)"`
-		Tanggal   string 	`json:"tanggal" gorm:"type:varchar(20)"`
-		Deskripsi string 	`json:"deskripsi"`
-		CreatedAt time.Time `json:"-"`
-		UpdatedAt time.Time `json:"-"`
+		ID        	uint   	`gorm:"primaryKey"`
+		Judul     	string 	`json:"tentang_desa" gorm:"type:varchar(100)"`
+		Gambar    	string 	`json:"gambar" gorm:"type:varchar(200)"`
+		Tanggal   	string 	`json:"tanggal" gorm:"type:varchar(20)"`
+		Deskripsi 	string 	`json:"deskripsi"`
+		CreatedAt 	time.Time `json:"-"`
+		UpdatedAt 	time.Time `json:"-"`
 	}
 
 	InfoKegiatanRepository interface {
@@ -32,6 +32,8 @@ type (
 		GetByID(id uint) (*InfoKegiatan, error)
 		DestroyInfoKegiatan(id uint) error
 		FetchInfoKegiatan() ([]*InfoKegiatan, error)
+		UploadImage(c *gin.Context) (string, error)
+		DeleteImage(c *gin.Context, id uint) error
 	}
 
 	InfoKegiatanHandler interface {

@@ -3,6 +3,7 @@ module web-desa
 go 1.19
 
 require (
+	github.com/adityarizkyramadhan/supabase-storage-uploader v0.0.3 // indirect
 	github.com/bytedance/sonic v1.9.2 // indirect
 	github.com/chenzhuoyu/base64x v0.0.0-20221115062448-fe3a3abad311 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.2 // indirect

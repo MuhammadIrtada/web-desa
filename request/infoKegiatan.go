@@ -2,9 +2,9 @@ package request
 
 type (
 	InfoKegiatanRequest struct {
-		Judul     string `json:"judul" binding:"required"`
-		Gambar    string `json:"gambar" binding:"required"`
-		Tanggal   string `json:"tanggal" binding:"required"`
-		Deskripsi string `json:"deskripsi" binding:"required"`
+		Judul     string `form:"judul" binding:"required"`
+		Gambar    string 
+		Tanggal   string `form:"tanggal" binding:"required"`
+		Deskripsi string `form:"deskripsi" binding:"required"`
 	}
 )
