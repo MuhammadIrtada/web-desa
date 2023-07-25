@@ -3,6 +3,9 @@ package service
 import (
 	"web-desa/model"
 	"web-desa/request"
+
+	supabasestorageuploader "github.com/adityarizkyramadhan/supabase-storage-uploader"
+	"github.com/gin-gonic/gin"
 )
 
 type wisataService struct {
@@ -84,4 +87,37 @@ func (w *wisataService) StoreWisata(req *request.WisataRequest) (*model.Wisata, 
 	}
 
 	return newwisata, nil
+}
+
+var supClientWisata = supabasestorageuploader.NewSupabaseClient(
+	"https://qbekdjxviuehumdvbstm.supabase.co",
+	"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFiZWtkanh2aXVlaHVtZHZic3RtIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTAyMDI4MTYsImV4cCI6MjAwNTc3ODgxNn0.BNktDUzBhCu8bfALLtQ7LxcZnrWVeJwXjh8S3I_iP0E",
+	"api-service-desa",
+	"wisata",
+)
+
+func (w *wisataService) UploadImage(c *gin.Context) (string, error) {
+	file, err := c.FormFile("gambar")
+	if err != nil {
+		return "", err
+	}
+	link, err := supClientWisata.Upload(file)
+	if err != nil {
+		return "", err
+	}
+	return link, nil
+}
+
+func (w *wisataService) DeleteImage(c *gin.Context, id uint) error {
+	infoKegiatan, errFind := w.GetByID(id)
+	if errFind != nil {
+		return errFind
+	}
+
+	_, err := supClientWisata.DeleteFile(infoKegiatan.Gambar)
+	if err != nil {
+		return err
+	} 
+
+	return nil
 }

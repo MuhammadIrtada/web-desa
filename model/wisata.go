@@ -36,6 +36,8 @@ type (
 		GetByID(id uint) (*Wisata, error)
 		DestroyWisata(id uint) error
 		FetchWisata() ([]*Wisata, error)
+		UploadImage(c *gin.Context) (string, error)
+		DeleteImage(c *gin.Context, id uint) error
 	}
 
 	WisataHandler interface {

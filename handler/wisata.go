@@ -29,7 +29,7 @@ func (u *wisataHandler) Mount(group *gin.RouterGroup) {
 func (u *wisataHandler) StoreWisataHandler(c *gin.Context) {
 	var req request.WisataRequest
 
-	err := c.ShouldBindJSON(&req)
+	err := c.ShouldBind(&req)
 	if err != nil {
 		helper.ResponseValidationErrorJson(c, "Error binding struct", err.Error())
 		return 
@@ -40,6 +40,14 @@ func (u *wisataHandler) StoreWisataHandler(c *gin.Context) {
 		helper.ResponseValidatorErrorJson(c, err)
 		return
 	}
+
+	link, err := u.wisataService.UploadImage(c)
+	if err != nil {
+		helper.ResponseErrorJson(c, http.StatusInternalServerError, err)
+		return
+	}
+	req.Gambar = link
+
 	wisata, err := u.wisataService.StoreWisata(&req)
 	if err !=nil {
 		helper.ResponseErrorJson(c, http.StatusBadRequest, err)
@@ -101,6 +109,12 @@ func (u *wisataHandler) EditWisataHandler(c *gin.Context) {
 func (h *wisataHandler) DeleteWisataHandler(c *gin.Context) {	
 	id := c.Param("id")
 	idUint, _ := strconv.ParseUint(id, 10, 32)
+
+	errDelImage := h.wisataService.DeleteImage(c, uint(idUint))
+	if errDelImage != nil {
+		helper.ResponseErrorJson(c, http.StatusInternalServerError, errDelImage)
+		return
+	}
 
 	err := h.wisataService.DestroyWisata(uint(idUint))
 	if err != nil {
