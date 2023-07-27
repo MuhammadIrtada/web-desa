@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"web-desa/config"
 	"web-desa/handler"
+	"web-desa/helper"
 	"web-desa/repository"
 	"web-desa/service"
 
@@ -47,11 +48,11 @@ func(s *server) Run() {
 		})
 	})
 
-	// s.httpServer.GET("/seeder", func(ctx *gin.Context) {
-	// 	helper.SeederRefresh(s.cfg)
+	s.httpServer.GET("/seeder", func(ctx *gin.Context) {
+		helper.SeederRefresh(s.cfg)
 		
-	// 	helper.ResponseSuccessJson(ctx, "seeder success", "")
-	// })
+		helper.ResponseSuccessJson(ctx, "seeder success", "")
+	})
 
 	userRepo := repository.NewUserRepository(s.cfg)
 	userService := service.NewUserService(userRepo)
