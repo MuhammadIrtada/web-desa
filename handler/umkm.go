@@ -83,7 +83,7 @@ func (u *umkmHandler) FetchUmkmHandler(c *gin.Context) {
 func (u *umkmHandler) EditUmkmHandler(c *gin.Context) {	
 	var req request.UmkmRequest
 
-	err := c.ShouldBindJSON(&req)
+	err := c.ShouldBind(&req)
 	if err != nil {
 		helper.ResponseValidationErrorJson(c, "Error binding struct", err.Error())
 		return 
@@ -96,6 +96,18 @@ func (u *umkmHandler) EditUmkmHandler(c *gin.Context) {
 
 	id := c.Param("id")
 	idUint, _ := strconv.ParseUint(id, 10, 32)
+
+	link, err := u.umkmService.UploadImage(c)
+	if err != nil {
+		infoKegiatan, err := u.umkmService.GetByID(uint(idUint))
+		if err != nil {
+			helper.ResponseValidationErrorJson(c, "Error binding struct", err.Error())
+			return 
+		}
+		req.Gambar = infoKegiatan.Gambar
+	} else {
+		req.Gambar = link
+	}
 
 	umkm, err := u.umkmService.EditUmkm(uint(idUint), &req)
 	if err != nil {

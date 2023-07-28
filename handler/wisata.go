@@ -83,7 +83,7 @@ func (u *wisataHandler) FetchWisataHandler(c *gin.Context) {
 func (u *wisataHandler) EditWisataHandler(c *gin.Context) {	
 	var req request.WisataRequest
 
-	err := c.ShouldBindJSON(&req)
+	err := c.ShouldBind(&req)
 	if err != nil {
 		helper.ResponseValidationErrorJson(c, "Error binding struct", err.Error())
 		return 
@@ -96,6 +96,18 @@ func (u *wisataHandler) EditWisataHandler(c *gin.Context) {
 
 	id := c.Param("id")
 	idUint, _ := strconv.ParseUint(id, 10, 32)
+
+	link, err := u.wisataService.UploadImage(c)
+	if err != nil {
+		infoKegiatan, err := u.wisataService.GetByID(uint(idUint))
+		if err != nil {
+			helper.ResponseValidationErrorJson(c, "Error binding struct", err.Error())
+			return 
+		}
+		req.Gambar = infoKegiatan.Gambar
+	} else {
+		req.Gambar = link
+	}
 
 	wisata, err := u.wisataService.EditWisata(uint(idUint), &req)
 	if err != nil {

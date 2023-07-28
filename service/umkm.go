@@ -85,9 +85,9 @@ func (u *umkmService) StoreUmkm(req *request.UmkmRequest) (*model.Umkm, error) {
 }
 
 var supClientUmkm = supabasestorageuploader.NewSupabaseClient(
-	"https://qbekdjxviuehumdvbstm.supabase.co",
-	"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFiZWtkanh2aXVlaHVtZHZic3RtIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTAyMDI4MTYsImV4cCI6MjAwNTc3ODgxNn0.BNktDUzBhCu8bfALLtQ7LxcZnrWVeJwXjh8S3I_iP0E",
-	"api-service-desa",
+	"https://wefjcxfoexcvmthzivgu.supabase.co",
+	"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndlZmpjeGZvZXhjdm10aHppdmd1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTA1NTc5NTYsImV4cCI6MjAwNjEzMzk1Nn0.nesAan2vtHoruxnnFmGFm4TAKinX7aJQcfkHWZhTB-g",
+	"web-desa",
 	"umkm",
 )
 
