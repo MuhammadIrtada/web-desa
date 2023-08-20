@@ -25,6 +25,7 @@ type (
 		FindByID(id uint) (*Umkm, error)
 		Delete(Umkm *Umkm) error
 		Fetch() ([]*Umkm, error)
+		GetLimitedUmkm(limit int) ([]*Umkm, error)
 	}
 
 	UmkmService interface {

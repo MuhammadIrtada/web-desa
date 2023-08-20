@@ -25,7 +25,18 @@ func (r *infoKegiatanRepository) Create(infoKegiatan *model.InfoKegiatan) (*mode
 func (r *infoKegiatanRepository) Fetch() ([]*model.InfoKegiatan, error) {
 	var data []*model.InfoKegiatan
 
-	err := r.cfg.Database().Find(&data).Error
+	err := r.cfg.Database().Order("created_at desc").Find(&data).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return data, nil
+}
+
+func (r *infoKegiatanRepository) GetLimitedInfoKegiatan(limit int) ([]*model.InfoKegiatan, error) {
+	var data []*model.InfoKegiatan
+
+	err := r.cfg.Database().Limit(limit).Find(&data).Error
 	if err != nil {
 		return nil, err
 	}

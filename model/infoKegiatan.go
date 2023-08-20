@@ -24,6 +24,7 @@ type (
 		FindByID(id uint) (*InfoKegiatan, error)
 		Delete(infoKegiatan *InfoKegiatan) (*InfoKegiatan, error)
 		Fetch() ([]*InfoKegiatan, error)
+		GetLimitedInfoKegiatan(limit int) ([]*InfoKegiatan, error)
 	}
 
 	InfoKegiatanService interface {

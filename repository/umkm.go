@@ -44,6 +44,17 @@ func (u *umkmRepository) Fetch() ([]*model.Umkm, error) {
 	return data, err
 }
 
+func (u *umkmRepository) GetLimitedUmkm(limit int) ([]*model.Umkm, error) {
+	var data []*model.Umkm
+
+	err := u.cfg.Database().Limit(limit).Find(&data).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return data, err
+}
+
 // FindByID implements model.UmkmRepository
 func (u *umkmRepository) FindByID(id uint) (*model.Umkm, error) {
 	umkm := new(model.Umkm)
