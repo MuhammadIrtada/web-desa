@@ -9,12 +9,12 @@ import (
 
 type (
 	Desa struct {
-		ID           uint           `gorm:"primaryKey"`
-		TentangDesa  string         `json:"tentang_desa"`
-		Visi         string         `json:"visi"`
-		Misi         string         `json:"misi"`
-		CreatedAt    time.Time      `json:"-"`
-		UpdatedAt    time.Time      `json:"-"`
+		ID          uint   		`gorm:"primaryKey"`
+		TentangDesa string 		`json:"tentang_desa"`
+		Visi        string 		`json:"visi"`
+		Misi        string 		`json:"misi"`
+		CreatedAt 	time.Time 	`json:"-"`
+		UpdatedAt 	time.Time 	`json:"-"`
 	}
 
 	DesaRepository interface {
@@ -26,7 +26,7 @@ type (
 
 	DesaService interface {
 		StoreDesa(req *request.DesaRequest) (*Desa, error)
-		FetchDesa() (*Desa, []*InfoKegiatan, []*Umkm, []*Wisata, error)
+		FetchDesa() (*Desa, error)
 		EditDesa(id uint, req *request.DesaRequest) (*Desa, error)
 		DestroyDesa() error
 	}

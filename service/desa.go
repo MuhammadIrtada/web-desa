@@ -6,27 +6,19 @@ import (
 )
 
 type desaService struct {
-	desaRepository         model.DesaRepository
-	infoKegiatanRepository model.InfoKegiatanRepository
-	umkmRepository         model.UmkmRepository
-	wisataRepository       model.WisataRepository
+	desaRepository model.DesaRepository
 }
 
-func NewDesaService(desa model.DesaRepository, infoKegiatan model.InfoKegiatanRepository, umkm model.UmkmRepository, wisata model.WisataRepository) model.DesaService {
-	return &desaService{
-		desaRepository:         desa,
-		infoKegiatanRepository: infoKegiatan,
-		umkmRepository:         umkm,
-		wisataRepository:       wisata,
-	}
+func NewDesaService(desa model.DesaRepository) model.DesaService {
+	return &desaService{desaRepository: desa}
 }
 
 func (s *desaService) StoreDesa(req *request.DesaRequest) (*model.Desa, error) {
 	desa := &model.Desa{
-		ID:          1,
+		ID: 1,
 		TentangDesa: req.TentangDesa,
-		Visi:        req.Visi,
-		Misi:        req.Misi,
+		Visi: req.Visi,
+		Misi: req.Misi,
 	}
 
 	newDesa, err := s.desaRepository.Create(desa)
@@ -37,36 +29,21 @@ func (s *desaService) StoreDesa(req *request.DesaRequest) (*model.Desa, error) {
 	return newDesa, nil
 }
 
-func (s *desaService) FetchDesa() (*model.Desa, []*model.InfoKegiatan, []*model.Umkm, []*model.Wisata, error) {
+func (s *desaService) FetchDesa() (*model.Desa, error) {
 	desa, err := s.desaRepository.Fetch()
 	if err != nil {
-		return nil, nil, nil, nil, err
+		return nil, err
 	}
 
-	infoKegiatan, err := s.infoKegiatanRepository.GetLimitedInfoKegiatan(3)
-	if err != nil {
-		return nil, nil, nil, nil, err
-	}
-
-	umkm, err := s.umkmRepository.GetLimitedUmkm(3)
-	if err != nil {
-		return nil, nil, nil, nil, err
-	}
-
-	wisata, err := s.wisataRepository.GetLimitedWisata(4)
-	if err != nil {
-		return nil, nil, nil, nil, err
-	}
-
-	return desa, infoKegiatan, umkm, wisata, nil
+	return desa, nil
 }
 
 func (s *desaService) EditDesa(id uint, req *request.DesaRequest) (*model.Desa, error) {
 	newDesa, err := s.desaRepository.Update(&model.Desa{
-		ID:          id,
+		ID: id,
 		TentangDesa: req.TentangDesa,
-		Visi:        req.Visi,
-		Misi:        req.Misi,
+		Visi: req.Visi,
+		Misi: req.Misi,
 	})
 
 	if err != nil {

@@ -60,31 +60,30 @@ func(s *server) Run() {
 	userGroup := s.httpServer.Group("/user")
 	userHandler.Mount(userGroup)
 
-	
+	desaRepo := repository.NewDesaRepository(s.cfg)
+	desaService := service.NewDesaService(desaRepo)
+	desaHandler := handler.NewDesaHandler(desaService)
+	desaGroup := s.httpServer.Group("/desa")
+	desaHandler.Mount(desaGroup)
+
 	infoKegiatanRepo := repository.NewInfoKegiatanRepository(s.cfg)
 	infoKegiatanService := service.NewInfoKegiatanService(infoKegiatanRepo)
 	infoKegiatanHandler := handler.NewInfoKegiatanHandler(infoKegiatanService)
 	infoKegiatanGroup := s.httpServer.Group("/info-kegiatan")
 	infoKegiatanHandler.Mount(infoKegiatanGroup)
-	
+
 	umkmRepo := repository.NewUmkmRepository(s.cfg)
 	umkmService := service.NewumkmService(umkmRepo)
 	umkmHandler := handler.NewUmkmHandler(umkmService)
 	umkmGroup := s.httpServer.Group("/umkm")
 	umkmHandler.Mount(umkmGroup)
-	
+
 	wisataRepo := repository.NewWisataRepository(s.cfg)
 	wisataService := service.NewWisataService(wisataRepo)
 	wisataHandler := handler.NewWisataHandler(wisataService)
 	wisataGroup := s.httpServer.Group("/wisata")
 	wisataHandler.Mount(wisataGroup)
 
-	desaRepo := repository.NewDesaRepository(s.cfg)
-	desaService := service.NewDesaService(desaRepo, infoKegiatanRepo, umkmRepo, wisataRepo)
-	desaHandler := handler.NewDesaHandler(desaService)
-	desaGroup := s.httpServer.Group("/desa")
-	desaHandler.Mount(desaGroup)
-	
 	if err := s.httpServer.Run(); err != nil {
 		log.Fatal(err)
 	}

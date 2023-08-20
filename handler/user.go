@@ -107,15 +107,6 @@ func (h *userHandler) UpdateUserHandler(c *gin.Context)  {
 	var UserRequest request.UserRequest
 
 	err := c.ShouldBindJSON(&UserRequest)
-	if err != nil {
-		helper.ResponseValidationErrorJson(c, "Error binding struct", err.Error())
-		return 
-	}
-
-	if err != nil {
-		helper.ResponseValidatorErrorJson(c, err)
-		return
-	}
 
 	idString := c.Param("id")
 	id, _ := strconv.ParseUint(idString, 10, 32)

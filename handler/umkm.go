@@ -99,13 +99,18 @@ func (u *umkmHandler) EditUmkmHandler(c *gin.Context) {
 
 	link, err := u.umkmService.UploadImage(c)
 	if err != nil {
-		infoKegiatan, err := u.umkmService.GetByID(uint(idUint))
+		umkm, err := u.umkmService.GetByID(uint(idUint))
 		if err != nil {
 			helper.ResponseValidationErrorJson(c, "Error binding struct", err.Error())
 			return 
 		}
-		req.Gambar = infoKegiatan.Gambar
+		req.Gambar = umkm.Gambar
 	} else {
+		errDelImage := u.umkmService.DeleteImage(c, uint(idUint))
+		if errDelImage != nil {
+			helper.ResponseErrorJson(c, http.StatusInternalServerError, errDelImage)
+			return
+		}
 		req.Gambar = link
 	}
 

@@ -44,17 +44,6 @@ func (w *wisataRepository) Fetch() ([]*model.Wisata, error) {
 	return data, err
 }
 
-func (w *wisataRepository) GetLimitedWisata(limit int) ([]*model.Wisata, error) {
-	var data []*model.Wisata
-
-	err := w.cfg.Database().Limit(limit).Find(&data).Error
-	if err != nil {
-		return nil, err
-	}
-
-	return data, err
-}
-
 // FindByID implements model.WisataRepository
 func (w *wisataRepository) FindByID(id uint) (*model.Wisata, error) {
 	wisata := new(model.Wisata)

@@ -6,7 +6,6 @@ import (
 	"web-desa/helper"
 	"web-desa/model"
 	"web-desa/request"
-	"web-desa/response"
 
 	"github.com/gin-gonic/gin"
 )
@@ -45,15 +44,13 @@ func (h *desaHandler) StoreDesaHandler(c *gin.Context) {
 }
 
 func (h *desaHandler) FetchDesaHandler(c *gin.Context) {
-	desa, infoKegiatan, umkm, wisata, err := h.desaService.FetchDesa()
+	desa, err := h.desaService.FetchDesa()
 	if err != nil {
 		helper.ResponseErrorJson(c, http.StatusBadRequest, err)
 		return
 	}
 
-	desaResponse := response.ConvertToDesaResponse(*desa, infoKegiatan, umkm, wisata)
-
-	helper.ResponseSuccessJson(c, "success", desaResponse)
+	helper.ResponseSuccessJson(c, "success", desa)
 }
 
 func (h *desaHandler) EditDesaHandler(c *gin.Context) {

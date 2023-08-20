@@ -99,13 +99,18 @@ func (u *wisataHandler) EditWisataHandler(c *gin.Context) {
 
 	link, err := u.wisataService.UploadImage(c)
 	if err != nil {
-		infoKegiatan, err := u.wisataService.GetByID(uint(idUint))
+		wisata, err := u.wisataService.GetByID(uint(idUint))
 		if err != nil {
 			helper.ResponseValidationErrorJson(c, "Error binding struct", err.Error())
 			return 
 		}
-		req.Gambar = infoKegiatan.Gambar
+		req.Gambar = wisata.Gambar
 	} else {
+		errDelImage := u.wisataService.DeleteImage(c, uint(idUint))
+		if errDelImage != nil {
+			helper.ResponseErrorJson(c, http.StatusInternalServerError, errDelImage)
+			return
+		}
 		req.Gambar = link
 	}
 

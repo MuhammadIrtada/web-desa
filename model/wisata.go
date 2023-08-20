@@ -28,7 +28,6 @@ type (
 		FindByID(id uint) (*Wisata, error)
 		Delete(wisata *Wisata) error
 		Fetch() ([]*Wisata, error)
-		GetLimitedWisata(limit int) ([]*Wisata, error)
 	}
 
 	WisataService interface {
